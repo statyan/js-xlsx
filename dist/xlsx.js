@@ -9300,6 +9300,7 @@ function parse_workbook(blob, options) {
 		if(options.sheetRows && lastcell.r >= options.sheetRows) cell_valid = false;
 		else out[last_cell] = line;
 	};
+
 	var opts = {
 		enc: false, // encrypted
 		sbcch: 0, // cch in the preceding SupBook
@@ -9309,11 +9310,12 @@ function parse_workbook(blob, options) {
 		rrtabid: [], // RRTabId
 		lastuser: "", // Last User from WriteAccess
 		biff: 8, // BIFF version
-		codepage: 0, // CP from CodePage record
+		codepage: 1200, // CP from CodePage record
 		winlocked: 0, // fLockWn from WinProtect
 		wtf: false
 	};
 	if(options.password) opts.password = options.password;
+	if(options.codepage) opts.codepage = options.codepage;
 	var mergecells = [];
 	var objects = [];
 	var supbooks = [[]]; // 1-indexed, will hold extern names
@@ -9325,8 +9327,8 @@ function parse_workbook(blob, options) {
 	var file_depth = 0; /* TODO: make a real stack */
 
 	/* explicit override for some broken writers */
-	opts.codepage = 1200;
-	set_cp(1200);
+		//opts.codepage = 1200;
+	set_cp(opts.codepage);
 
 	while(blob.l < blob.length - 1) {
 		var s = blob.l;
